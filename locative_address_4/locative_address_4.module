@@ -1,0 +1,90 @@
+<?php
+
+/**
+ * @file
+ * Add phone number fields to Location address.
+ */
+
+/**
+ * Implements hook_locationapi().
+ */
+function locative_address_4_locationapi(&$location, $op, $a3 = NULL, $a4 = NULL) {
+  switch ($op) {
+    case 'fields':
+      return array('address4' => t('Address Line 4'));
+
+    // @codingStandardsIgnoreStart
+    case 'defaults':
+      return array(
+        'address4' => array('default' => '', 'collect' => 0, 'weight' => 25),
+      );
+    // @codingStandardsIgnoreEnd
+
+    case 'field_expand':
+      if ($a3 == 'address4') {
+        return array(
+          '#type' => 'textfield',
+          '#title' => t('Address line 4'),
+          '#description' => NULL,
+          '#required' => ($a4['collect'] == 2),
+          '#default_value' => $location,
+        );
+      }
+
+      break;
+
+    case 'save':
+      db_delete('locative_address_4')
+        ->condition('lid', $location['lid'])
+        ->execute();
+      if (!empty($location['address4'])) {
+        db_insert('locative_address_4')
+          ->fields(
+            array(
+              'lid' => $location['lid'],
+              'address4' => $location['address4'],
+            )
+          )
+          ->execute();
+      }
+      break;
+
+    case 'load':
+      $fields = array();
+      $phone = db_query(
+        'SELECT address4 FROM {locative_address_4} WHERE lid = :lid',
+        array(':lid' => $location['lid'])
+      )->fetchField();
+      $fields['address4'] = $phone ? $phone : '';
+
+      return $fields;
+
+    case 'delete':
+      db_delete('locative_address_4')
+        ->condition('lid', $location['lid'])
+        ->execute();
+      break;
+  }
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function locative_address_4_views_api() {
+  return array(
+    'api' => 3,
+  );
+}
+
+/**
+ * Implements hook_token_list().
+ */
+function locative_address_4_token_list($type = 'all') {
+  if ($type == 'node' || $type == 'user' || $type == 'all') {
+    $tokens['location']['location-phone_N'] = t(
+      'Location Phone number (If there are multiple locations per node, N is the iteration, starting with 0)'
+    );
+
+    return $tokens;
+  }
+}

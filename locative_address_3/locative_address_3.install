@@ -1,0 +1,56 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the locative_address_3 module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function locative_address_3_schema() {
+  $schema['locative_address_3'] = array(
+    'description' => 'locative_address_3.module {location} supplementary table.',
+    'fields' => array(
+      'lid' => array(
+        'description' => '{location}.lid',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'address3' => array(
+        'description' => 'Address 3',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+
+    ),
+    'primary key' => array('lid'),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implements hook_install().
+ */
+function locative_address_3_install() {
+  // Change weight.
+  db_update('system')
+    ->fields(
+      array(
+        'weight' => 1,
+      )
+    )
+    ->condition('name', 'locative_address_3')
+    ->condition('type', 'module')
+    ->execute();
+}
+
+
+
+
+
