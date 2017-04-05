@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Views 3 support for Location Phone.
+ * Views 3 support for Location address4.
  */
 
 /**

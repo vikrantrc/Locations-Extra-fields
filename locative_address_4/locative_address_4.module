@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Add phone number fields to Location address.
+ * Add address4 fields to Location address.
  */
 
 /**
@@ -51,11 +51,11 @@ function locative_address_4_locationapi(&$location, $op, $a3 = NULL, $a4 = NULL)
 
     case 'load':
       $fields = array();
-      $phone = db_query(
+      $address4 = db_query(
         'SELECT address4 FROM {locative_address_4} WHERE lid = :lid',
         array(':lid' => $location['lid'])
       )->fetchField();
-      $fields['address4'] = $phone ? $phone : '';
+      $fields['address4'] = $address4 ? $address4 : '';
 
       return $fields;
 
@@ -81,8 +81,8 @@ function locative_address_4_views_api() {
  */
 function locative_address_4_token_list($type = 'all') {
   if ($type == 'node' || $type == 'user' || $type == 'all') {
-    $tokens['location']['location-phone_N'] = t(
-      'Location Phone number (If there are multiple locations per node, N is the iteration, starting with 0)'
+    $tokens['location']['location-address4_N'] = t(
+      'Location address4 (If there are multiple locations per node, N is the iteration, starting with 0)'
     );
 
     return $tokens;

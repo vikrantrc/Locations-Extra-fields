@@ -51,11 +51,11 @@ function locative_address_3_locationapi(&$location, $op, $a3 = NULL, $a4 = NULL)
 
     case 'load':
       $fields = array();
-      $phone = db_query(
+      $address3 = db_query(
         'SELECT address3 FROM {locative_address_3} WHERE lid = :lid',
         array(':lid' => $location['lid'])
       )->fetchField();
-      $fields['address3'] = $phone ? $phone : '';
+      $fields['address3'] = $address3 ? $address3 : '';
 
       return $fields;
 
@@ -81,8 +81,8 @@ function locative_address_3_views_api() {
  */
 function locative_address_3_token_list($type = 'all') {
   if ($type == 'node' || $type == 'user' || $type == 'all') {
-    $tokens['location']['location-phone_N'] = t(
-      'Location Phone number (If there are multiple locations per node, N is the iteration, starting with 0)'
+    $tokens['location']['location-address3_N'] = t(
+      'Location address3 (If there are multiple locations per node, N is the iteration, starting with 0)'
     );
 
     return $tokens;
